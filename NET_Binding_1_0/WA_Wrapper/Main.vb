@@ -33,8 +33,9 @@
         'Print out what we're about to do in the console.
         Output("Getting response for the search terms """ & WolframAlphaSearchTerms & """ and the application ID string """ & WolframAlphaApplicationID & """ ...", 0, ConsoleColor.White)
 
+        Engine.APIKey = WolframAlphaApplicationID
         'Use the engine to get a response, from the application ID specified, and the search terms.
-        Engine.LoadResponse(WolframAlphaSearchTerms, WolframAlphaApplicationID)
+        Engine.LoadResponse(WolframAlphaSearchTerms)
 
         'Print out a message saying that the last task was successful.
         Output("Response injected.", 0, ConsoleColor.White)

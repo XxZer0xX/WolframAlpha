@@ -1,59 +1,52 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Web;
-using WolframAlpha.Utilities;
 
 namespace WolframAlpha
 {
     
     public class WolframAlphaQuery
     {
-        private const string _mainRoot = "http://api.wolframalpha.com/v1/query.jsp";
+        public const string MainURL = "http://api.wolframalpha.com/v1/query.jsp";
+        private const string _substitutionKey = "&substitution=";
+        private const string _podTitleKey = "&podtitle=";
 
         #region Properties
 
-        private IDictionary<string, IList<string>> UriParams
+        public IList<string> Substitutions { get; private set; }
+
+        public IList<WolframAlphaAssumption> Assumptions { get; private set; }
+       
+        public IList<string> PodTitles { get; private set; }
+
+        public string ApiKey 
         {
-            get 
-            {
-                return new Dictionary<string, IList<string>>
-                {
-                    {"&substitution=",Substitutions},
-                    {"&assumptions=", Assumptions},
-                    {"&podtitle=",PodTitles}
-                }; 
-            }
+            get { return WolframAlphaEngine.ApiKey; }
+            //set { WolframAlphaEngine.ApiKey = value; }
         }
 
-        public string ApiKey { get; set; }
         public string Format { get; set; }
         public string Query { get; set; }
         public bool MoreOutput { get; set; }
-        public bool Asynchronous { get; set; }
+        public bool IsAsync { get; set; }
         public bool AllowCaching { get; set; }
         public int TimeLimit { get; set; }
-        public IList<string> Substitutions { get; private set; }
-        public IList<string> Assumptions { get; private set; }
-        public IList<string> PodTitles { get; private set; }
 
         public string FullQueryString
-        {get
+        {
+            get
             {
-                var strBuilder = new StringBuilder();
-                strBuilder.
                 return string.Format(
-                    "?appid={0}&moreoutput={1}&timelimit={2}&format={3}&input={4}" ,
-                    ApiKey, MoreOutput,
-                    TimeLimit, Format,
-                    string.Format(
-                        "{0}{1}{2}",
-                        Query, _assumption,
-                       _substitution));     
+                    "?appid={0}&moreoutput={1}&timelimit={2}&format={3}&input={4}", 
+                    ApiKey, MoreOutput, TimeLimit, Format,
+                    string.Format("{0}{1}{2}", Query, 
+                        Assumptions.Select(a => a.ToString()).Aggregate((a,b) => a+b), 
+                        Substitutions.Aggregate((a,b) => string.Format("{0}{1}{0}{2}",_substitutionKey,a,b) )));
             }
         }
-
+      
         #endregion
 
         #region Constructor
@@ -62,8 +55,8 @@ namespace WolframAlpha
         {
             Substitutions = new List<string>();
             PodTitles = new List<string>();
-            Assumptions = new List<string>();
-            ApiKey = string.Empty;
+            Assumptions = new List<WolframAlphaAssumption>();
+            //ApiKey = string.Empty;
             Format = string.Empty;
             Query = string.Empty;
         }
@@ -72,28 +65,33 @@ namespace WolframAlpha
 
         #region Methods
 
-        public void AddPodTitle(string podtitle, bool checkForDuplicates = false)
+        public void AddPodTitle(string podTitle, bool allowDuplicates = false)
         {
-            if (!checkForDuplicates || !_podTitle.ContainsCaseIgnore(string.Format("&podtitle={0}", HttpUtility.UrlEncode(podtitle))))
-                _podTitle += string.Format("&podtitle={0}", HttpUtility.UrlEncode(podtitle));
+            var encodedPodTitle = HttpUtility.UrlEncode(podTitle);
+            if (!PodTitles.Any(title
+                => title.Equals(encodedPodTitle, StringComparison.CurrentCultureIgnoreCase))
+                || allowDuplicates)
+                PodTitles.Add(encodedPodTitle);
         }
 
-        public void AddSubstitution(string substitution, bool checkForDuplicates = false)
+        public void AddSubstitution(string substitution, bool allowDuplicates = false)
         {
-            if (!checkForDuplicates || !_podTitle.ContainsCaseIgnore(string.Format("&substitution={0}", HttpUtility.UrlEncode(substitution))))
-                _podTitle += string.Format("&substitution={0}", HttpUtility.UrlEncode(substitution));
+            var encodedSubstitution = HttpUtility.UrlEncode(substitution);
+            if (!Substitutions.Any(sub
+                => sub.Equals(encodedSubstitution, StringComparison.CurrentCultureIgnoreCase)) 
+                || allowDuplicates)
+                Substitutions.Add(encodedSubstitution);
         }
 
-        public void AddAsssumption(string assumption, bool checkForDuplicates = false)
+        public void AddAssumption(string word, bool allowDuplicates = false)
         {
-            if (!checkForDuplicates || !_podTitle.ContainsCaseIgnore(string.Format("&asssumption={0}", HttpUtility.UrlEncode(assumption))))
-                _podTitle += string.Format("&asssumption={0}", HttpUtility.UrlEncode(assumption));
+            AddAssumption(new WolframAlphaAssumption(HttpUtility.UrlEncode(word)), allowDuplicates);
         }
 
-        public void AddAssumption(WolframAlphaAssumption assumption, bool checkForDuplicates = false)
+        public void AddAssumption(WolframAlphaAssumption assumption, bool allowDuplicates = false)
         {
-            if (!checkForDuplicates || !_podTitle.ContainsCaseIgnore(string.Format("&asssumption={0}", HttpUtility.UrlEncode(assumption.Word))))
-                _podTitle += string.Format("&asssumption={0}", HttpUtility.UrlEncode(assumption.Word));
+            if (!Assumptions.Contains(assumption) || allowDuplicates )
+                Assumptions.Add(assumption);
         }
 
         #endregion
