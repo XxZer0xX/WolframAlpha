@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region Referencing
+
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+
+#endregion
 
 namespace WolframAlpha.Utilities
 {
@@ -11,19 +12,20 @@ namespace WolframAlpha.Utilities
     {
         public static T Deserialize<T>(XDocument doc)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+            doc.Declaration = new XDeclaration("1.0","UTF-8","yes");
+            var xmlSerializer = new XmlSerializer(typeof(T));
 
-            using (var reader = doc.Root.CreateReader())
+            using (var reader = doc.CreateReader())
             {
-                return (T)xmlSerializer.Deserialize(reader);
+                return (T) xmlSerializer.Deserialize(reader);
             }
         }
 
         public static XDocument Serialize<T>(T value)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+            var xmlSerializer = new XmlSerializer(typeof(T));
 
-            XDocument doc = new XDocument();
+            var doc = new XDocument();
             using (var writer = doc.CreateWriter())
             {
                 xmlSerializer.Serialize(writer, value);

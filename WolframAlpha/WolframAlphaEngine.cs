@@ -1,9 +1,14 @@
-﻿using System;
+﻿#region Referencing
+
+using System;
 using System.IO;
+using System.Linq;
 using System.Net;
-using System.Web;
 using System.Xml.Linq;
 using WolframAlpha.Utilities;
+using WolframAlpha.XmlSerializable;
+
+#endregion
 
 namespace WolframAlpha
 {
@@ -11,10 +16,10 @@ namespace WolframAlpha
     {
         public static string ApiKey 
         {
-            get { return WolframAlpha.Settings.Default.ApiKey; }
+            get { return Settings.Default.ApiKey; }
             //set; 
         }
-        public WolframAlphaQueryResult QueryResult { get; private set; }
+        public QueryResult QueryResult { get; private set; }
         public WolframAlphaValidationResult ValidationResult { get; private set; }
 
         public WolframAlphaEngine() 
@@ -24,12 +29,12 @@ namespace WolframAlpha
 
         public WolframAlphaValidationResult ValidateQuery(WolframAlphaQuery query)
         {
-            return _getHttpResponse<WolframAlphaValidationResult>(query);
+            return this._getHttpResponse<WolframAlphaValidationResult>(query);
         }
 
-        public WolframAlphaQueryResult LoadResponse(WolframAlphaQuery query)
+        public QueryResult LoadResponse(WolframAlphaQuery query)
         {
-            return _getHttpResponse<WolframAlphaQueryResult>(query);
+            return this._getHttpResponse<QueryResult>(query);
         }
 
         private T _getHttpResponse<T>(WolframAlphaQuery query)
@@ -37,10 +42,10 @@ namespace WolframAlpha
             if (string.IsNullOrEmpty(query.ApiKey) && string.IsNullOrEmpty(ApiKey))
                 throw new NullReferenceException("API key has not been specified");
 
-            if (query.IsAsync && !query.Format.Equals(WolframAlphaQueryFormat.HTML))
+            if (query.IsAsync && !query.Format.Equals(QueryResultFormat.HTML))
                 throw new Exception("Query format must be \"HTML\" for aysnc operations.");
 
-            var request = (HttpWebRequest)WebRequest.Create(string.Format("", WolframAlphaQuery.MainURL, query.FullQueryString));
+            var request = (HttpWebRequest)WebRequest.Create(string.Format("{0}{1}", WolframAlphaQuery.MainURL, query.Parameters));
 
             request.KeepAlive = true;
 
@@ -64,7 +69,7 @@ namespace WolframAlpha
         /// <summary>
         ///     Not needed??
         /// </summary>
-        public WolframAlphaQueryResult LoadResponse(string response)
+        public QueryResult LoadResponse(string response)
         {
             throw new NotImplementedException();
         }
@@ -72,7 +77,7 @@ namespace WolframAlpha
         /// <summary>
         ///     Not needed??
         /// </summary>
-        public WolframAlphaQueryResult LoadResponse(XDocument xmlResponse)
+        public QueryResult LoadResponse(XDocument xmlResponse)
         {
             throw new NotImplementedException();
         }

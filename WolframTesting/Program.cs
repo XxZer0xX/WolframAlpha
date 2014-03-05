@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace WolframTesting
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        private static void Main( string[] args )
         {
-            var query = new WolframAlpha.WolframAlphaQuery("England");
+            var result = new WolframAlpha.GenericQuery("Who is Roger Rabit").Execute();
         }
     }
 }

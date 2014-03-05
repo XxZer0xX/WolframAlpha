@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#region Referencing
+
+using System;
 using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 
-namespace WolframAlpha
+#endregion
+
+namespace WolframAlpha.XmlSerializable
 {
     [Serializable]
-    public class WolframAlphaSubPod
+    public class SubPod
     {
         [XmlAttribute("title")]
         public string Title { get; set; }

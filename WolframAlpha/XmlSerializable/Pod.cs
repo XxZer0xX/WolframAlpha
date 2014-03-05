@@ -1,14 +1,16 @@
-﻿using System;
+﻿#region Referencing
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 
+#endregion
 
-namespace WolframAlpha
+namespace WolframAlpha.XmlSerializable
 {
     [Serializable]
-    public class WolframAlphaPod
+    public class Pod
     {
         [XmlAttribute("title")]
         public string Title { get; set; }
@@ -19,16 +21,22 @@ namespace WolframAlpha
         [XmlAttribute("position")]
         public int Position { get; set; }
 
+        [XmlAttribute("id")]
+        public int Id { get; set; }
+
         [XmlAttribute("error")]
         public bool ErrorOccured { get; set; }
 
         [XmlElement("subpod")]
-        public List<WolframAlphaSubPod> SubPods { get; set; }
-        
+        public List<SubPod> SubPods { get; set; }
+
+        [XmlElement("states")]
+        public List<PodState> States { get; set; }
+
         [XmlIgnore]
         public int NumberOfSubPods
         {
-            get { return SubPods.Count; }
+            get { return this.SubPods.Count; }
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="WolframAlpha" GeneratedClassName="Settings1">
+﻿<?xml version='1.0' encoding='utf-8' ?>
+
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)"
+              GeneratedClassNamespace="WolframAlpha" GeneratedClassName="Settings1">
   <Profiles />
   <Settings>
     <Setting Name="ApiKey" Type="System.String" Scope="User">

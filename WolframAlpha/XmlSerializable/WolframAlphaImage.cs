@@ -1,13 +1,16 @@
-﻿using System;
+﻿#region Referencing
+
+using System.Linq;
 using System.Xml.Serialization;
 
-namespace WolframAlpha
+#endregion
+
+namespace WolframAlpha.XmlSerializable
 {
-    [Serializable]
-    public class WolframAlphaImage
+    public class WolframAlphaImage : Serializable
     {
         [XmlAttribute("location")]
-        public Uri Location { get; set; }
+        public string Location { get; set; }
 
         [XmlAttribute("alt")]
         public string HoverText { get; set; }

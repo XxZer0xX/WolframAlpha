@@ -1,11 +1,13 @@
-﻿using System;
+﻿#region Referencing
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Xml.Serialization;
 
-namespace WolframAlpha
+#endregion
+
+namespace WolframAlpha.XmlSerializable
 {
     [Serializable]
     public class WolframAlphaValidationResult
@@ -23,12 +25,12 @@ namespace WolframAlpha
         public List<string> ParsedDataList { get; set; }
 
         [XmlElement("assumptions")]
-        public List<WolframAlphaAssumption> Assumptions { get; set; }
+        public List<Assumption> Assumptions { get; set; }
        
         [XmlIgnore]
         public string ParseData
         {
-            get { return ParsedDataList.First(); }
+            get { return this.ParsedDataList.First(); }
         }
     }
 }

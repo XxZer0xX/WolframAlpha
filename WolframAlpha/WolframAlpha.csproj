@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WolframAlpha</RootNamespace>
     <AssemblyName>WolframAlpha</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,26 +41,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenericQuery.cs" />
+    <Compile Include="XmlSerializable\AssumptionValue.cs" />
+    <Compile Include="XmlSerializable\Warnings\Warning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlSerializable\PodState.cs" />
+    <Compile Include="XmlSerializable\Serializable.cs" />
     <Compile Include="Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Utilities\SerializationUtility.cs" />
-    <Compile Include="WolframAlphaAssumption.cs" />
+    <Compile Include="XmlSerializable\Assumption.cs" />
     <Compile Include="WolframAlphaEngine.cs" />
-    <Compile Include="WolframAlphaImage.cs" />
-    <Compile Include="WolframAlphaPod.cs" />
+    <Compile Include="XmlSerializable\Warnings\SpellCheck.cs" />
+    <Compile Include="Collections\WarningsList.cs" />
+    <Compile Include="XmlSerializable\WolframAlphaImage.cs" />
+    <Compile Include="XmlSerializable\Pod.cs" />
     <Compile Include="WolframAlphaQuery.cs" />
-    <Compile Include="WolframAlphaQueryFormat.cs" />
-    <Compile Include="WolframAlphaQueryResult.cs" />
-    <Compile Include="WolframAlphaSubPod.cs" />
-    <Compile Include="WolframAlphaValidationResult.cs" />
+    <Compile Include="QueryResultFormat.cs" />
+    <Compile Include="XmlSerializable\QueryResult.cs" />
+    <Compile Include="XmlSerializable\QueryResultSource.cs" />
+    <Compile Include="XmlSerializable\SubPod.cs" />
+    <Compile Include="XmlSerializable\WolframAlphaValidationResult.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Collections\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Settings.settings">
