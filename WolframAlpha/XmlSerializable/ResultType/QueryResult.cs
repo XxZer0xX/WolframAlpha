@@ -13,7 +13,7 @@ namespace WolframAlpha.XmlSerializable
 {
     [Serializable]
     [XmlRoot("queryresult")]
-    public class QueryResult
+    public abstract class QueryResult
     {
         [XmlAttribute("success")]
         public bool Success { get; set; }
@@ -28,7 +28,7 @@ namespace WolframAlpha.XmlSerializable
         public string TimedOut { get; set; }
 
         [XmlAttribute("parsetiming")]
-        public string ParseTiming { get; set; }
+        public double ParsingTime { get; set; }
 
         [XmlAttribute("parsetimedout")]
         public bool ParseTimedOut { get; set; }
@@ -49,14 +49,9 @@ namespace WolframAlpha.XmlSerializable
         public WarningsList Warnings { get; set; }
 
         [XmlIgnore]
-        public XDocument XmlDocument { get; set; }
-
-        [XmlIgnore]
         public int NumberOfPods 
         {
             get { return this.Pods.Count; } 
-        }
-
-        public double ParsingTime { get; set; }
+        } 
     }
 }

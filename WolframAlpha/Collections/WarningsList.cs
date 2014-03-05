@@ -13,6 +13,16 @@ namespace WolframAlpha.Collections
     {
         public int Count { get { return this.warningsList.Count; } }
 
+        public void Add(Warning item)
+        {
+            warningsList.Add(item);
+        }
+
+        public void Remove(Warning item)
+        {
+            warningsList.Remove(item);
+        }
+
         public WarningsList()
         {
             this.warningsList = new List<Warning>();

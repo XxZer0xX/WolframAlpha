@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="GenericQuery.cs" />
     <Compile Include="XmlSerializable\AssumptionValue.cs" />
+    <Compile Include="XmlSerializable\ResultType\HtmlResult.cs" />
+    <Compile Include="XmlSerializable\ResultType\XmlResult.cs" />
     <Compile Include="XmlSerializable\Warnings\Warning.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlSerializable\PodState.cs" />
@@ -61,7 +63,7 @@
     <Compile Include="XmlSerializable\Pod.cs" />
     <Compile Include="WolframAlphaQuery.cs" />
     <Compile Include="QueryResultFormat.cs" />
-    <Compile Include="XmlSerializable\QueryResult.cs" />
+    <Compile Include="XmlSerializable\ResultType\QueryResult.cs" />
     <Compile Include="XmlSerializable\QueryResultSource.cs" />
     <Compile Include="XmlSerializable\SubPod.cs" />
     <Compile Include="XmlSerializable\WolframAlphaValidationResult.cs" />

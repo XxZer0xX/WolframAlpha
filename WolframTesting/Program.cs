@@ -10,7 +10,7 @@ namespace WolframTesting
     {
         private static void Main( string[] args )
         {
-            var result = new WolframAlpha.GenericQuery("Who is Roger Rabit").Execute();
+            var result = new WolframAlpha.GenericQuery("who is bugs bunny").Execute(WolframAlpha.QueryResultFormat.HTML,false,false,true,false);
         }
     }
 }

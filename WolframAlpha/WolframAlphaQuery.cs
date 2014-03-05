@@ -22,7 +22,6 @@ namespace WolframAlpha
         public const string MainURL = "http://api.wolframalpha.com/v1/query.jsp";
         private const string _substitutionKey = "&substitution=";
         private const string _podTitleKey = "&podtitle=";
-        private string _format;
 
         #region Properties
 
@@ -71,6 +70,7 @@ namespace WolframAlpha
                     this.PodTitles.Count > 0 
                     ? this.PodTitles.Aggregate((a,b) => string.Format("{0}{1}{0}{2}",_podTitleKey,a,b) )
                     : string.Empty,
+
                     "&format=" + this.Format));
             }
         }
@@ -140,8 +140,9 @@ namespace WolframAlpha
             if (!this.Assumptions.Contains(assumption))
                 this.Assumptions.Add(assumption);
         }
+        #region Execute Overloads
 
-        public QueryResult Execute(bool isAsync = false, bool moreOutput = false, bool allowCaching = false)
+        protected QueryResult _execute(bool keepAlive ,bool isAsync = false, bool moreOutput = false, bool allowCaching = false)
         {
             this.IsAsync = isAsync;
             this.MoreOutput = moreOutput;
@@ -155,28 +156,74 @@ namespace WolframAlpha
 
             var request = (HttpWebRequest)WebRequest.Create(string.Format("{0}{1}", MainURL, this.Parameters));
 
-            request.KeepAlive = true;
+            request.KeepAlive = keepAlive;
 
             using (var streamReader = new StreamReader(request.GetResponse().GetResponseStream()))
             {
                 var xdoc = XDocument.Parse(streamReader.ReadToEnd());
 #if Debug
-                using(var stream = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.Desktop)+"\\testing.txt",FileMode.Append))
+                using (var stream = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\testing.txt", FileMode.Append))
                 {
-                    using(var writer = new StreamWriter(stream))
+                    using (var writer = new StreamWriter(stream))
                     {
-                        writer.Write( xdoc );
+                        writer.Write(xdoc);
                         stream.Flush();
                     }
                 }
 #endif
                 var deserializedObject = SerializationUtility.Deserialize<QueryResult>(xdoc);
+                
                 deserializedObject.XmlDocument = xdoc;
                 return deserializedObject;
             }
-
-               
         }
+
+        public QueryResult Execute()
+        {
+            return _execute(true);
+        }
+
+        public QueryResult Execute(string format)
+        {
+            Format = format;
+            return _execute(true);
+        }
+
+        public QueryResult Execute( bool keepAlive, string format )
+        {
+            Format = format;
+            return _execute(keepAlive);
+        }
+
+        public QueryResult Execute(bool keepAlive , bool isAsync)
+        {
+            if (isAsync)
+                Format = QueryResultFormat.HTML;
+            return _execute(keepAlive);
+        }
+
+        public QueryResult Execute(bool keepAlive, bool isAsync, bool moreOutput)
+        {
+            if (isAsync)
+                Format = QueryResultFormat.HTML;
+            return _execute(keepAlive, moreOutput: moreOutput);
+        }
+
+        public QueryResult Execute(bool keepAlive, bool isAsync, bool moreOutput, bool allowCaching)
+        {
+            if (isAsync)
+                Format = QueryResultFormat.HTML;
+            return _execute(keepAlive, moreOutput: moreOutput, allowCaching: allowCaching);
+        }
+
+        public QueryResult Execute(string format, bool keepAlive, bool isAsync, bool moreOutput, bool allowCaching)
+        {
+            Format = isAsync ? QueryResultFormat.HTML : format;
+            return _execute(keepAlive, moreOutput: moreOutput, allowCaching: allowCaching);
+        }
+
+
+        #endregion
 
         #endregion
 

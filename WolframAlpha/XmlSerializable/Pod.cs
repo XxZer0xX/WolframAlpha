@@ -22,7 +22,7 @@ namespace WolframAlpha.XmlSerializable
         public int Position { get; set; }
 
         [XmlAttribute("id")]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [XmlAttribute("error")]
         public bool ErrorOccured { get; set; }
