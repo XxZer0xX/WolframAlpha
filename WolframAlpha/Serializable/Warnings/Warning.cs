@@ -4,7 +4,7 @@ using System.Linq;
 
 #endregion
 
-namespace WolframAlpha.XmlSerializable.Warnings
+namespace WolframAlpha.Serializable.Warnings
 {
     public abstract class Warning
     {

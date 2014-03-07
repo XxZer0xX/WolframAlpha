@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 #endregion
 
-namespace WolframAlpha.XmlSerializable
+namespace WolframAlpha.Serializable
 {
     public class Assumption : Serializable, IEqualityComparer<Assumption>, IEquatable<Assumption>
     {

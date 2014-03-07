@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{096CAD64-D0B5-41F5-B11D-4486B990D1B7}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{D50E1F31-13BF-4424-BFAA-F9BD29E6F7B3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WolframAlpha</RootNamespace>
-    <AssemblyName>WolframAlpha</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>WolframAlphaWinforms</RootNamespace>
+    <AssemblyName>WolframAlphaWinforms</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,53 +34,51 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Serializable\Generalization.cs" />
-    <Compile Include="HtmlResultQuery.cs" />
-    <Compile Include="Sound.cs" />
-    <Compile Include="XmlResultQuery.cs" />
-    <Compile Include="Serializable\AssumptionValue.cs" />
-    <Compile Include="Serializable\ResultType\HtmlResult.cs" />
-    <Compile Include="Serializable\ResultType\XmlResult.cs" />
-    <Compile Include="Serializable\Warnings\Delimeters.cs" />
-    <Compile Include="Serializable\Warnings\Reinterpret.cs" />
-    <Compile Include="Serializable\Warnings\Translation.cs" />
-    <Compile Include="Serializable\Warnings\Warning.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializable\PodState.cs" />
-    <Compile Include="Serializable\Serializable.cs" />
-    <Compile Include="Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Utilities\SerializationUtility.cs" />
-    <Compile Include="Serializable\Assumption.cs" />
-    <Compile Include="WolframAlphaEngine.cs" />
-    <Compile Include="Serializable\Warnings\SpellCheck.cs" />
-    <Compile Include="Collections\WarningsList.cs" />
-    <Compile Include="Serializable\Image.cs" />
-    <Compile Include="Serializable\Pod.cs" />
-    <Compile Include="WolframAlphaQuery.cs" />
-    <Compile Include="QueryResultFormat.cs" />
-    <Compile Include="Serializable\ResultType\QueryResult.cs" />
-    <Compile Include="Serializable\QueryResultSource.cs" />
-    <Compile Include="Serializable\SubPod.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Settings.settings">
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WolframAlpha\WolframAlpha.csproj">
+      <Project>{096cad64-d0b5-41f5-b11d-4486b990d1b7}</Project>
+      <Name>WolframAlpha</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

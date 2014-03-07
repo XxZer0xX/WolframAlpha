@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 
 #endregion
 
-namespace WolframAlpha.XmlSerializable
+namespace WolframAlpha.Serializable
 {
     [Serializable]
     public class SubPod
@@ -18,6 +18,6 @@ namespace WolframAlpha.XmlSerializable
         public string Text { get; set; }
         
         [XmlElement("img")]
-        public WolframAlphaImage PodImage { get; set; }
+        public Image PodImage { get; set; }
     }
 }

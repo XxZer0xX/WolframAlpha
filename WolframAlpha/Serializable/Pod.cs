@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 
 #endregion
 
-namespace WolframAlpha.XmlSerializable
+namespace WolframAlpha.Serializable
 {
     [Serializable]
     public class Pod

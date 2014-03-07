@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 #endregion
 
-namespace WolframAlpha.XmlSerializable.Warnings
+namespace WolframAlpha.Serializable.Warnings
 {
     public class SpellCheck : Warning
     {

@@ -5,9 +5,9 @@ using System.Xml.Serialization;
 
 #endregion
 
-namespace WolframAlpha.XmlSerializable
+namespace WolframAlpha.Serializable
 {
-    public class WolframAlphaImage : Serializable
+    public class Image : Serializable
     {
         [XmlAttribute("location")]
         public string Location { get; set; }

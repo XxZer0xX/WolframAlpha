@@ -5,7 +5,7 @@ using System.Linq;
 
 #endregion
 
-namespace WolframAlpha.XmlSerializable
+namespace WolframAlpha.Serializable
 {
     [Serializable]
     public abstract class Serializable

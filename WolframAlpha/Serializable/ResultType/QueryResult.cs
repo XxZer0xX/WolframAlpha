@@ -9,11 +9,11 @@ using WolframAlpha.Collections;
 
 #endregion
 
-namespace WolframAlpha.XmlSerializable
+namespace WolframAlpha.Serializable.ResultType
 {
     [Serializable]
     [XmlRoot("queryresult")]
-    public abstract class QueryResult
+    public class QueryResult
     {
         [XmlAttribute("success")]
         public bool Success { get; set; }
@@ -47,6 +47,9 @@ namespace WolframAlpha.XmlSerializable
 
         [XmlElement("warngings")]
         public WarningsList Warnings { get; set; }
+
+        [XmlIgnore]
+        public XDocument DefaultResult { get; set; }
 
         [XmlIgnore]
         public int NumberOfPods 

@@ -9,14 +9,15 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Xml.Linq;
+using WolframAlpha.Serializable;
+using WolframAlpha.Serializable.ResultType;
 using WolframAlpha.Utilities;
-using WolframAlpha.XmlSerializable;
 
 #endregion
 
 namespace WolframAlpha
 {
-    
+
     public abstract class WolframAlphaQuery
     {
         public const string MainURL = "http://api.wolframalpha.com/v1/query.jsp";
@@ -25,21 +26,25 @@ namespace WolframAlpha
 
         #region Properties
 
-        public IList<int> PodsAtIndexs { get; private set; }
+        public IList<int> PodsAtIndexs { get; set; }
 
-        public IList<string> PodsToInclude { get; private set; }
+        public IList<string> PodsToInclude { get; set; }
 
-        public IList<string> PodsToExclude { get; private set; }
+        public IList<string> PodsToExclude { get; set; }
 
-        public IList<string> Substitutions { get; private set; }
+        public IList<string> Substitutions { get; set; }
 
-        public IList<Assumption> Assumptions { get; private set; }
-       
+        public IList<Assumption> Assumptions { get; set; }
+
         public IList<string> PodTitles { get; private set; }
 
-        public string ApiKey 
+        public string ApiKey
         {
-            get { return WolframAlphaEngine.ApiKey; }
+            get
+            {
+                //WolframAlphaEngine.ApiKey;
+                return Settings.Default.ApiKey;
+            }
             //set { WolframAlphaEngine.ApiKey = value; }
         }
 
@@ -55,32 +60,32 @@ namespace WolframAlpha
             get
             {
                 return string.Format(
-                    "?appid={0}&moreoutput={1}&timelimit={2}&input={3}", 
+                    "?appid={0}&moreoutput={1}&timelimit={2}&input={3}",
                     this.ApiKey, this.MoreOutput, this.TimeLimit,
-                    string.Format("{0}{1}{2}{3}{4}", this.Query, 
+                    string.Format("{0}{1}{2}{3}{4}", this.Query,
 
-                    this.Assumptions.Count > 0 
-                    ? this.Assumptions.Select(a => a.ToString()).Aggregate((a,b) => a+b)
-                    : string.Empty, 
-
-                    this.Substitutions.Count > 0 
-                    ? this.Substitutions.Aggregate((a,b) => string.Format("{0}{1}{0}{2}",_substitutionKey,a,b) )
+                    this.Assumptions.Count > 0
+                    ? this.Assumptions.Select(a => a.ToString()).Aggregate((a, b) => a + b)
                     : string.Empty,
 
-                    this.PodTitles.Count > 0 
-                    ? this.PodTitles.Aggregate((a,b) => string.Format("{0}{1}{0}{2}",_podTitleKey,a,b) )
+                    this.Substitutions.Count > 0
+                    ? this.Substitutions.Aggregate((a, b) => string.Format("{0}{1}{0}{2}", _substitutionKey, a, b))
+                    : string.Empty,
+
+                    this.PodTitles.Count > 0
+                    ? this.PodTitles.Aggregate((a, b) => string.Format("{0}{1}{0}{2}", _podTitleKey, a, b))
                     : string.Empty,
 
                     "&format=" + this.Format));
             }
         }
-      
+
         #endregion
 
         #region Constructor
 
         protected WolframAlphaQuery(string query)
-        : this()
+            : this()
         {
             this.Query = query;
         }
@@ -130,29 +135,19 @@ namespace WolframAlpha
             throw new NotImplementedException();
         }
 
-        public void AddAssumption(string word)
-        {
-            this.AddAssumption(new Assumption(HttpUtility.UrlEncode(word)));
-        }
-
-        public void AddAssumption(Assumption assumption, bool allowDuplicates = false)
-        {
-            if (!this.Assumptions.Contains(assumption))
-                this.Assumptions.Add(assumption);
-        }
         #region Execute Overloads
 
-        protected QueryResult _execute(bool keepAlive ,bool isAsync = false, bool moreOutput = false, bool allowCaching = false)
+        protected T _execute<T>(bool keepAlive, bool isAsync = false, bool moreOutput = false, bool allowCaching = false) where T : QueryResult
         {
+            if (string.IsNullOrEmpty(Query))
+                return null;
+
             this.IsAsync = isAsync;
             this.MoreOutput = moreOutput;
             this.AllowCaching = allowCaching;
 
             if (string.IsNullOrEmpty(this.ApiKey))
                 throw new NullReferenceException("API key has not been specified");
-
-            if (this.IsAsync && !this.Format.Equals(QueryResultFormat.HTML))
-                throw new Exception("Query format must be \"HTML\" for aysnc operations.");
 
             var request = (HttpWebRequest)WebRequest.Create(string.Format("{0}{1}", MainURL, this.Parameters));
 
@@ -161,67 +156,29 @@ namespace WolframAlpha
             using (var streamReader = new StreamReader(request.GetResponse().GetResponseStream()))
             {
                 var xdoc = XDocument.Parse(streamReader.ReadToEnd());
-#if Debug
-                using (var stream = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\testing.txt", FileMode.Append))
-                {
-                    using (var writer = new StreamWriter(stream))
-                    {
-                        writer.Write(xdoc);
-                        stream.Flush();
-                    }
-                }
-#endif
-                var deserializedObject = SerializationUtility.Deserialize<QueryResult>(xdoc);
-                
-                deserializedObject.XmlDocument = xdoc;
-                return deserializedObject;
+
+
+                var obj = SerializationUtility.Deserialize<T>(xdoc);
+                obj.DefaultResult = xdoc;
+                return obj;
+
             }
         }
 
-        public QueryResult Execute()
-        {
-            return _execute(true);
-        }
+        //public virtual T Execute<T>(bool keepAlive) where T : QueryResult
+        //{
+        //    return _execute<T>(keepAlive);
+        //}
 
-        public QueryResult Execute(string format)
-        {
-            Format = format;
-            return _execute(true);
-        }
+        //public virtual T Execute<T>(bool keepAlive, bool moreOutput) where T : QueryResult
+        //{
+        //    return _execute<T>(keepAlive, moreOutput: moreOutput);
+        //}
 
-        public QueryResult Execute( bool keepAlive, string format )
-        {
-            Format = format;
-            return _execute(keepAlive);
-        }
-
-        public QueryResult Execute(bool keepAlive , bool isAsync)
-        {
-            if (isAsync)
-                Format = QueryResultFormat.HTML;
-            return _execute(keepAlive);
-        }
-
-        public QueryResult Execute(bool keepAlive, bool isAsync, bool moreOutput)
-        {
-            if (isAsync)
-                Format = QueryResultFormat.HTML;
-            return _execute(keepAlive, moreOutput: moreOutput);
-        }
-
-        public QueryResult Execute(bool keepAlive, bool isAsync, bool moreOutput, bool allowCaching)
-        {
-            if (isAsync)
-                Format = QueryResultFormat.HTML;
-            return _execute(keepAlive, moreOutput: moreOutput, allowCaching: allowCaching);
-        }
-
-        public QueryResult Execute(string format, bool keepAlive, bool isAsync, bool moreOutput, bool allowCaching)
-        {
-            Format = isAsync ? QueryResultFormat.HTML : format;
-            return _execute(keepAlive, moreOutput: moreOutput, allowCaching: allowCaching);
-        }
-
+        //public virtual T Execute<T>(bool keepAlive, bool moreOutput, bool allowCaching) where T : QueryResult
+        //{
+        //    return _execute<T>(keepAlive, moreOutput: moreOutput, allowCaching: allowCaching);
+        //}
 
         #endregion
 

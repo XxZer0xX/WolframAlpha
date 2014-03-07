@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlpha", "WolframAlpha\WolframAlpha.csproj", "{096CAD64-D0B5-41F5-B11D-4486B990D1B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframTesting", "WolframTesting\WolframTesting.csproj", "{AB167843-B21C-4ECE-ABF9-A81D232FB79A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WolframAlphaWinforms", "WolframAlphaWinforms\WolframAlphaWinforms.csproj", "{D50E1F31-13BF-4424-BFAA-F9BD29E6F7B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +21,10 @@ Global
 		{AB167843-B21C-4ECE-ABF9-A81D232FB79A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB167843-B21C-4ECE-ABF9-A81D232FB79A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB167843-B21C-4ECE-ABF9-A81D232FB79A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D50E1F31-13BF-4424-BFAA-F9BD29E6F7B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D50E1F31-13BF-4424-BFAA-F9BD29E6F7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D50E1F31-13BF-4424-BFAA-F9BD29E6F7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D50E1F31-13BF-4424-BFAA-F9BD29E6F7B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
