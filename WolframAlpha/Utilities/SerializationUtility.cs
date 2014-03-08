@@ -12,7 +12,7 @@ namespace WolframAlpha.Utilities
     {
         public static T Deserialize<T>(XDocument doc)
         {
-            doc.Declaration = new XDeclaration("1.0","UTF-8","yes");
+            //doc.Declaration = new XDeclaration("1.0","UTF-8","yes");
             var xmlSerializer = new XmlSerializer(typeof(T));
 
             using (var reader = doc.Root.CreateReader())
